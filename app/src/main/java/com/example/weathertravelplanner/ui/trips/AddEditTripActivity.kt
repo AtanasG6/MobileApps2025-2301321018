@@ -68,6 +68,16 @@ class AddEditTripActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnSaveTrip).setOnClickListener {
             saveTrip()
         }
+
+        val btnDelete = findViewById<Button>(R.id.btnDeleteTrip)
+        if (isEditMode) {
+            btnDelete.visibility = android.view.View.VISIBLE
+            btnDelete.setOnClickListener {
+                deleteTrip()
+            }
+        } else {
+            btnDelete.visibility = android.view.View.GONE
+        }
     }
 
     private fun showDatePicker(onDateSelected: (Long) -> Unit) {
@@ -135,5 +145,25 @@ class AddEditTripActivity : AppCompatActivity() {
         }
 
         finish()
+    }
+
+    private fun deleteTrip() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Delete Trip")
+            .setMessage("Are you sure you want to delete this trip?")
+            .setPositiveButton("Delete") { _, _ ->
+                val trip = Trip(
+                    id = tripId,
+                    name = "",
+                    city = "",
+                    startDate = 0,
+                    endDate = 0
+                )
+                viewModel.deleteTrip(trip)
+                Toast.makeText(this, "Trip deleted!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }
