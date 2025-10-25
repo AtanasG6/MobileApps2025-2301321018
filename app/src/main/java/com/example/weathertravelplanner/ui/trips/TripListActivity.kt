@@ -35,7 +35,8 @@ class TripListActivity : AppCompatActivity() {
 
         // Setup FAB
         findViewById<FloatingActionButton>(R.id.fabAddTrip).setOnClickListener {
-            // TODO: Open Add Trip screen
+            val intent = android.content.Intent(this, AddEditTripActivity::class.java)
+            startActivity(intent)
         }
     }
 }
