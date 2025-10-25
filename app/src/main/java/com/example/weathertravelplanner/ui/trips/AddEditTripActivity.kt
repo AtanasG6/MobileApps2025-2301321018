@@ -25,6 +25,9 @@ class AddEditTripActivity : AppCompatActivity() {
     private var endDateMillis: Long = 0
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+    private var tripId: Long = 0
+    private var isEditMode = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_trip)
@@ -36,6 +39,17 @@ class AddEditTripActivity : AppCompatActivity() {
         etStartDate = findViewById(R.id.etStartDate)
         etEndDate = findViewById(R.id.etEndDate)
         etNotes = findViewById(R.id.etNotes)
+
+        // Check if editing existing trip
+        tripId = intent.getLongExtra("TRIP_ID", 0)
+        isEditMode = tripId != 0L
+
+        if (isEditMode) {
+            title = "Edit Trip"
+            loadTripData()
+        } else {
+            title = "Add Trip"
+        }
 
         etStartDate.setOnClickListener {
             showDatePicker { date ->
@@ -70,6 +84,20 @@ class AddEditTripActivity : AppCompatActivity() {
         ).show()
     }
 
+    private fun loadTripData() {
+        viewModel.getTripById(tripId).observe(this) { trip ->
+            trip?.let {
+                etTripName.setText(it.name)
+                etCity.setText(it.city)
+                startDateMillis = it.startDate
+                endDateMillis = it.endDate
+                etStartDate.setText(dateFormat.format(Date(it.startDate)))
+                etEndDate.setText(dateFormat.format(Date(it.endDate)))
+                etNotes.setText(it.notes)
+            }
+        }
+    }
+
     private fun saveTrip() {
         val name = etTripName.text.toString().trim()
         val city = etCity.text.toString().trim()
@@ -90,6 +118,7 @@ class AddEditTripActivity : AppCompatActivity() {
         }
 
         val trip = Trip(
+            id = if (isEditMode) tripId else 0,
             name = name,
             city = city,
             startDate = startDateMillis,
@@ -97,8 +126,14 @@ class AddEditTripActivity : AppCompatActivity() {
             notes = etNotes.text.toString().trim()
         )
 
-        viewModel.insertTrip(trip)
-        Toast.makeText(this, "Trip saved!", Toast.LENGTH_SHORT).show()
+        if (isEditMode) {
+            viewModel.updateTrip(trip)
+            Toast.makeText(this, "Trip updated!", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.insertTrip(trip)
+            Toast.makeText(this, "Trip saved!", Toast.LENGTH_SHORT).show()
+        }
+
         finish()
     }
 }
