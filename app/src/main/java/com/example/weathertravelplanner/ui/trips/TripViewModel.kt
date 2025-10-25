@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.liveData
 import com.example.weathertravelplanner.data.local.AppDatabase
 import com.example.weathertravelplanner.data.local.entity.Trip
 import com.example.weathertravelplanner.data.repository.TripRepository
@@ -31,5 +32,12 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteTrip(trip: Trip) = viewModelScope.launch {
         repository.deleteTrip(trip)
+    }
+
+    fun getTripById(id: Long): LiveData<Trip?> {
+        return liveData {
+            val trip = repository.getTripById(id)
+            emit(trip)
+        }
     }
 }
