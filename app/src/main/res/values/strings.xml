@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Weather Travel Planner</string>
     <string name="add_trip">Add Trip</string>
+    <string name="trip_name">Trip Name</string>
+    <string name="city">City</string>
+    <string name="save_trip">Save Trip</string>
 </resources>
