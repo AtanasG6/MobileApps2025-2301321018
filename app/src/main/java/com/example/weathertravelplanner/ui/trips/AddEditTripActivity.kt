@@ -19,6 +19,7 @@ class AddEditTripActivity : AppCompatActivity() {
     private lateinit var etCity: TextInputEditText
     private lateinit var etStartDate: TextInputEditText
     private lateinit var etEndDate: TextInputEditText
+    private lateinit var etNotes: TextInputEditText
 
     private var startDateMillis: Long = 0
     private var endDateMillis: Long = 0
@@ -34,6 +35,7 @@ class AddEditTripActivity : AppCompatActivity() {
         etCity = findViewById(R.id.etCity)
         etStartDate = findViewById(R.id.etStartDate)
         etEndDate = findViewById(R.id.etEndDate)
+        etNotes = findViewById(R.id.etNotes)
 
         etStartDate.setOnClickListener {
             showDatePicker { date ->
@@ -92,7 +94,7 @@ class AddEditTripActivity : AppCompatActivity() {
             city = city,
             startDate = startDateMillis,
             endDate = endDateMillis,
-            notes = ""
+            notes = etNotes.text.toString().trim()
         )
 
         viewModel.insertTrip(trip)
