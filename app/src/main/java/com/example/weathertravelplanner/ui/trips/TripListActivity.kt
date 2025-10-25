@@ -23,7 +23,9 @@ class TripListActivity : AppCompatActivity() {
         // Setup RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewTrips)
         adapter = TripAdapter(emptyList()) { trip ->
-            // TODO: Handle trip click
+            val intent = android.content.Intent(this, AddEditTripActivity::class.java)
+            intent.putExtra("TRIP_ID", trip.id)
+            startActivity(intent)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
