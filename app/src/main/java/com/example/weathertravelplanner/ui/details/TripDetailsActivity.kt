@@ -132,9 +132,13 @@ class TripDetailsActivity : AppCompatActivity() {
                 loadWeatherIcon(iconUrl, ivWeatherIcon)
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
+                tvWeatherInfo.visibility = View.GONE
+                ivWeatherIcon.visibility = View.GONE
+                tvWeatherInfo.text = "Weather data unavailable"
+                tvWeatherInfo.visibility = View.VISIBLE
                 Toast.makeText(
                     this@TripDetailsActivity,
-                    "Failed to load weather",
+                    "Failed to load weather for this city",
                     Toast.LENGTH_SHORT
                 ).show()
             }
