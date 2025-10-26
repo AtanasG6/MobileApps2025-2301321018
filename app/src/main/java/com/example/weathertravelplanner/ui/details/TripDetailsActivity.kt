@@ -43,7 +43,8 @@ class TripDetailsActivity : AppCompatActivity() {
             trip?.let {
                 tvTripName.text = it.name
                 tvCity.text = it.city
-                tvDates.text = "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
+                tvDates.text =
+                    "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
                 tvNotes.text = if (it.notes.isNotEmpty()) it.notes else "No notes"
 
                 // Fetch weather
@@ -57,7 +58,12 @@ class TripDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar, ivWeatherIcon: ImageView) {
+    private fun fetchWeather(
+        city: String,
+        tvWeatherInfo: TextView,
+        progressBar: ProgressBar,
+        ivWeatherIcon: ImageView
+    ) {
         lifecycleScope.launch {
             try {
                 progressBar.visibility = View.VISIBLE
@@ -80,34 +86,28 @@ class TripDetailsActivity : AppCompatActivity() {
                 loadWeatherIcon(iconUrl, ivWeatherIcon)
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
-                Toast.makeText(this@TripDetailsActivity, "Failed to load weather", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@TripDetailsActivity,
+                    "Failed to load weather",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     private fun loadWeatherIcon(url: String, imageView: ImageView) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
-                android.util.Log.d("WeatherIcon", "Loading icon from: $url")
+                val connection = java.net.URL(url).openConnection()
+                connection.connect()
+                val inputStream = connection.getInputStream()
+                val bitmap = android.graphics.BitmapFactory.decodeStream(inputStream)
 
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    val connection = java.net.URL(url).openConnection()
-                    connection.connect()
-                    val inputStream = connection.getInputStream()
-                    val bitmap = android.graphics.BitmapFactory.decodeStream(inputStream)
-
-                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                        if (bitmap != null) {
-                            imageView.setImageBitmap(bitmap)
-                            imageView.visibility = View.VISIBLE
-                            android.util.Log.d("WeatherIcon", "Icon loaded successfully")
-                        } else {
-                            android.util.Log.e("WeatherIcon", "Bitmap is null")
-                        }
-                    }
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                    imageView.setImageBitmap(bitmap)
+                    imageView.visibility = View.VISIBLE
                 }
             } catch (e: Exception) {
-                android.util.Log.e("WeatherIcon", "Error loading icon: ${e.message}")
                 e.printStackTrace()
             }
         }
