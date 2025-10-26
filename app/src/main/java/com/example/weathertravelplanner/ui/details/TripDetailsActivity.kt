@@ -1,5 +1,6 @@
 package com.example.weathertravelplanner.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -11,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathertravelplanner.R
+import com.example.weathertravelplanner.data.local.entity.Trip
 import com.example.weathertravelplanner.data.remote.api.RetrofitInstance
+import com.example.weathertravelplanner.ui.trips.AddEditTripActivity
 import com.example.weathertravelplanner.ui.trips.TripViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -22,6 +25,7 @@ class TripDetailsActivity : AppCompatActivity() {
     private lateinit var viewModel: TripViewModel
     private val apiKey = "06c5fcf1013fc1260a9a1213e2630e08"
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private var currentTripId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +33,7 @@ class TripDetailsActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[TripViewModel::class.java]
 
-        val tripId = intent.getLongExtra("TRIP_ID", 0)
+        currentTripId = intent.getLongExtra("TRIP_ID", 0)
 
         val tvTripName = findViewById<TextView>(R.id.tvDetailTripName)
         val tvCity = findViewById<TextView>(R.id.tvDetailCity)
@@ -39,17 +43,26 @@ class TripDetailsActivity : AppCompatActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.weatherProgressBar)
         val ivWeatherIcon = findViewById<ImageView>(R.id.ivWeatherIcon)
 
-        viewModel.getTripById(tripId).observe(this) { trip ->
+        viewModel.getTripById(currentTripId).observe(this) { trip ->
             trip?.let {
                 tvTripName.text = it.name
                 tvCity.text = it.city
-                tvDates.text =
-                    "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
+                tvDates.text = "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
                 tvNotes.text = if (it.notes.isNotEmpty()) it.notes else "No notes"
 
                 // Fetch weather
                 fetchWeather(it.city, tvWeatherInfo, progressBar, ivWeatherIcon)
             }
+        }
+
+        findViewById<Button>(R.id.btnEditTrip).setOnClickListener {
+            val intent = Intent(this, AddEditTripActivity::class.java)
+            intent.putExtra("TRIP_ID", currentTripId)
+            startActivity(intent)
+        }
+
+        findViewById<Button>(R.id.btnDeleteTripFromDetails).setOnClickListener {
+            deleteTrip()
         }
 
         findViewById<Button>(R.id.btnViewOnMap).setOnClickListener {
@@ -58,12 +71,7 @@ class TripDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchWeather(
-        city: String,
-        tvWeatherInfo: TextView,
-        progressBar: ProgressBar,
-        ivWeatherIcon: ImageView
-    ) {
+    private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar, ivWeatherIcon: ImageView) {
         lifecycleScope.launch {
             try {
                 progressBar.visibility = View.VISIBLE
@@ -86,11 +94,7 @@ class TripDetailsActivity : AppCompatActivity() {
                 loadWeatherIcon(iconUrl, ivWeatherIcon)
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
-                Toast.makeText(
-                    this@TripDetailsActivity,
-                    "Failed to load weather",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@TripDetailsActivity, "Failed to load weather", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -111,5 +115,25 @@ class TripDetailsActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun deleteTrip() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Delete Trip")
+            .setMessage("Are you sure you want to delete this trip?")
+            .setPositiveButton("Delete") { _, _ ->
+                val trip = Trip(
+                    id = currentTripId,
+                    name = "",
+                    city = "",
+                    startDate = 0,
+                    endDate = 0
+                )
+                viewModel.deleteTrip(trip)
+                Toast.makeText(this, "Trip deleted!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }
