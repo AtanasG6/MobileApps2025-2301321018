@@ -40,7 +40,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchCityCoordinates() {
         lifecycleScope.launch {
             try {
-                val response = RetrofitInstance.weatherApi.getCoordinates(cityName, 1, apiKey)
+                val response = com.example.weathertravelplanner.data.remote.api.GeocodingRetrofitInstance.api.getCoordinates(cityName, 1, apiKey)
 
                 if (response.isNotEmpty()) {
                     val location = response[0]
