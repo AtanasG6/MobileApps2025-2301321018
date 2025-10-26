@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.weathertravelplanner.R
+import com.example.weathertravelplanner.data.remote.api.GeocodingRetrofitInstance
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -39,7 +40,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchCityCoordinates() {
         lifecycleScope.launch {
             try {
-                val response = com.example.weathertravelplanner.data.remote.api.GeocodingRetrofitInstance.api.getCoordinates(cityName, 1, apiKey)
+                val response = GeocodingRetrofitInstance.geocodingApi.getCoordinates(cityName, 1, apiKey)
 
                 if (response.isNotEmpty()) {
                     val location = response[0]

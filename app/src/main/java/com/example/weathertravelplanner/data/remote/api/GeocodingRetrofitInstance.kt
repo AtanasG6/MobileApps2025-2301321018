@@ -7,7 +7,7 @@ object GeocodingRetrofitInstance {
 
     private const val BASE_URL = "https://api.openweathermap.org/"
 
-    val api: GeocodingApiService by lazy {
+    val geocodingApi: GeocodingApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
