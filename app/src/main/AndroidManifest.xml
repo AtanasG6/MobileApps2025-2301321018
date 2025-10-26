@@ -34,6 +34,10 @@
         <activity
             android:name=".ui.details.TripDetailsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
