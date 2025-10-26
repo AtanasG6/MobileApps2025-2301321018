@@ -8,4 +8,6 @@
     <string name="end_date">End Date</string>
     <string name="notes">Notes (optional)</string>
     <string name="delete_trip">Delete Trip</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="view_on_map">View on Map</string>
 </resources>
