@@ -101,6 +101,35 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:id="@+id/layoutEditDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weatherCard">
+
+            <Button
+                android:id="@+id/btnEditTrip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="@string/edit_trip" />
+
+            <Button
+                android:id="@+id/btnDeleteTripFromDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/delete_trip"
+                android:backgroundTint="@android:color/holo_red_dark" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnViewOnMap"
             android:layout_width="0dp"
@@ -109,7 +138,7 @@
             android:text="@string/view_on_map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/weatherCard" />
+            app:layout_constraintTop_toBottomOf="@id/layoutEditDelete" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
