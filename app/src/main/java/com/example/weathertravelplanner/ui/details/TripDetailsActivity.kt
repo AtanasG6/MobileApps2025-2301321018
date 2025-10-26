@@ -27,6 +27,7 @@ class TripDetailsActivity : AppCompatActivity() {
     private val apiKey = Constants.OPENWEATHER_API_KEY
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var currentTripId: Long = 0
+    private var currentCity: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +49,8 @@ class TripDetailsActivity : AppCompatActivity() {
             trip?.let {
                 tvTripName.text = it.name
                 tvCity.text = it.city
-                tvDates.text =
-                    "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
+                currentCity = it.city
+                tvDates.text = "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
                 tvNotes.text = if (it.notes.isNotEmpty()) it.notes else "No notes"
 
                 // Fetch weather
@@ -68,11 +69,12 @@ class TripDetailsActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnViewOnMap).setOnClickListener {
-            viewModel.getTripById(currentTripId).value?.let { trip ->
-                val intent =
-                    Intent(this, com.example.weathertravelplanner.ui.map.MapActivity::class.java)
-                intent.putExtra("CITY_NAME", trip.city)
+            if (currentCity.isNotEmpty()) {
+                val intent = Intent(this, com.example.weathertravelplanner.ui.map.MapActivity::class.java)
+                intent.putExtra("CITY_NAME", currentCity)
                 startActivity(intent)
+            } else {
+                Toast.makeText(this, "City not loaded yet", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -84,28 +86,22 @@ class TripDetailsActivity : AppCompatActivity() {
             trip?.let {
                 findViewById<TextView>(R.id.tvDetailTripName).text = it.name
                 findViewById<TextView>(R.id.tvDetailCity).text = it.city
+                currentCity = it.city
                 findViewById<TextView>(R.id.tvDetailDates).text =
                     "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
                 findViewById<TextView>(R.id.tvDetailNotes).text =
                     if (it.notes.isNotEmpty()) it.notes else "No notes"
 
                 // Reload weather if city changed
-                fetchWeather(
-                    it.city,
+                fetchWeather(it.city,
                     findViewById(R.id.tvWeatherInfo),
                     findViewById(R.id.weatherProgressBar),
-                    findViewById(R.id.ivWeatherIcon)
-                )
+                    findViewById(R.id.ivWeatherIcon))
             }
         }
     }
 
-    private fun fetchWeather(
-        city: String,
-        tvWeatherInfo: TextView,
-        progressBar: ProgressBar,
-        ivWeatherIcon: ImageView
-    ) {
+    private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar, ivWeatherIcon: ImageView) {
         lifecycleScope.launch {
             try {
                 progressBar.visibility = View.VISIBLE
@@ -128,11 +124,7 @@ class TripDetailsActivity : AppCompatActivity() {
                 loadWeatherIcon(iconUrl, ivWeatherIcon)
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
-                Toast.makeText(
-                    this@TripDetailsActivity,
-                    "Failed to load weather",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@TripDetailsActivity, "Failed to load weather", Toast.LENGTH_SHORT).show()
             }
         }
     }
