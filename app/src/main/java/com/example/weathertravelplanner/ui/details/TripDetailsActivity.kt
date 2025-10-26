@@ -3,6 +3,7 @@ package com.example.weathertravelplanner.ui.details
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -36,6 +37,7 @@ class TripDetailsActivity : AppCompatActivity() {
         val tvNotes = findViewById<TextView>(R.id.tvDetailNotes)
         val tvWeatherInfo = findViewById<TextView>(R.id.tvWeatherInfo)
         val progressBar = findViewById<ProgressBar>(R.id.weatherProgressBar)
+        val ivWeatherIcon = findViewById<ImageView>(R.id.ivWeatherIcon)
 
         viewModel.getTripById(tripId).observe(this) { trip ->
             trip?.let {
@@ -45,7 +47,7 @@ class TripDetailsActivity : AppCompatActivity() {
                 tvNotes.text = if (it.notes.isNotEmpty()) it.notes else "No notes"
 
                 // Fetch weather
-                fetchWeather(it.city, tvWeatherInfo, progressBar)
+                fetchWeather(it.city, tvWeatherInfo, progressBar, ivWeatherIcon)
             }
         }
 
@@ -55,7 +57,7 @@ class TripDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar) {
+    private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar, ivWeatherIcon: ImageView) {
         lifecycleScope.launch {
             try {
                 progressBar.visibility = View.VISIBLE
@@ -71,9 +73,42 @@ class TripDetailsActivity : AppCompatActivity() {
                 tvWeatherInfo.text = weatherText
                 tvWeatherInfo.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
+
+                // Load weather icon
+                val iconCode = response.weather[0].icon
+                val iconUrl = "https://openweathermap.org/img/wn/$iconCode@2x.png"
+                loadWeatherIcon(iconUrl, ivWeatherIcon)
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this@TripDetailsActivity, "Failed to load weather", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun loadWeatherIcon(url: String, imageView: ImageView) {
+        lifecycleScope.launch {
+            try {
+                android.util.Log.d("WeatherIcon", "Loading icon from: $url")
+
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    val connection = java.net.URL(url).openConnection()
+                    connection.connect()
+                    val inputStream = connection.getInputStream()
+                    val bitmap = android.graphics.BitmapFactory.decodeStream(inputStream)
+
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        if (bitmap != null) {
+                            imageView.setImageBitmap(bitmap)
+                            imageView.visibility = View.VISIBLE
+                            android.util.Log.d("WeatherIcon", "Icon loaded successfully")
+                        } else {
+                            android.util.Log.e("WeatherIcon", "Bitmap is null")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("WeatherIcon", "Error loading icon: ${e.message}")
+                e.printStackTrace()
             }
         }
     }
