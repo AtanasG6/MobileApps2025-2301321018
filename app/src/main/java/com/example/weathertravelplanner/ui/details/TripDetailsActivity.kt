@@ -71,6 +71,27 @@ class TripDetailsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Reload trip data when returning from edit
+        viewModel.getTripById(currentTripId).observe(this) { trip ->
+            trip?.let {
+                findViewById<TextView>(R.id.tvDetailTripName).text = it.name
+                findViewById<TextView>(R.id.tvDetailCity).text = it.city
+                findViewById<TextView>(R.id.tvDetailDates).text =
+                    "${dateFormat.format(Date(it.startDate))} - ${dateFormat.format(Date(it.endDate))}"
+                findViewById<TextView>(R.id.tvDetailNotes).text =
+                    if (it.notes.isNotEmpty()) it.notes else "No notes"
+
+                // Reload weather if city changed
+                fetchWeather(it.city,
+                    findViewById(R.id.tvWeatherInfo),
+                    findViewById(R.id.weatherProgressBar),
+                    findViewById(R.id.ivWeatherIcon))
+            }
+        }
+    }
+
     private fun fetchWeather(city: String, tvWeatherInfo: TextView, progressBar: ProgressBar, ivWeatherIcon: ImageView) {
         lifecycleScope.launch {
             try {
