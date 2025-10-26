@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.weathertravelplanner.Constants
 import com.example.weathertravelplanner.R
 import com.example.weathertravelplanner.data.local.entity.Trip
 import com.example.weathertravelplanner.data.remote.api.RetrofitInstance
@@ -23,7 +24,7 @@ import java.util.*
 class TripDetailsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TripViewModel
-    private val apiKey = "06c5fcf1013fc1260a9a1213e2630e08"
+    private val apiKey = Constants.OPENWEATHER_API_KEY
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var currentTripId: Long = 0
 
