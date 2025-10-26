@@ -3,7 +3,7 @@ package com.example.weathertravelplanner.data.remote.api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitInstance {
+object WeatherRetrofitInstance {
 
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 

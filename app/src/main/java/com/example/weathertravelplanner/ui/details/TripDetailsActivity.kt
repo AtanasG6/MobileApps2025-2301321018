@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weathertravelplanner.R
 import com.example.weathertravelplanner.data.local.entity.Trip
-import com.example.weathertravelplanner.data.remote.api.RetrofitInstance
+import com.example.weathertravelplanner.data.remote.api.WeatherRetrofitInstance
 import com.example.weathertravelplanner.ui.trips.AddEditTripActivity
 import com.example.weathertravelplanner.ui.trips.TripViewModel
 import kotlinx.coroutines.launch
@@ -104,7 +104,7 @@ class TripDetailsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 progressBar.visibility = View.VISIBLE
-                val response = RetrofitInstance.weatherApi.getCurrentWeather(city, apiKey)
+                val response = WeatherRetrofitInstance.weatherApi.getCurrentWeather(city, apiKey)
 
                 val weatherText = """
                     Temperature: ${response.main.temp}°C
