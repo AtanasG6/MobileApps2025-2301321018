@@ -99,7 +99,7 @@ Weather Travel Planner е Android приложение за планиране �
 ### Списък с пътувания
 <img src="screenshots/1_trip_list.png" width="300">
 
-### Добавяне на пътуване
+### Добавяне/Редактиране на пътуване
 <img src="screenshots/2_add_trip.png" width="300">
 
 ### Детайли с прогноза за времето
