@@ -80,9 +80,8 @@ Weather Travel Planner е Android приложение за планиране �
 4. Стартирайте на емулатор или реално устройство
 
 ### API Keys:
-Проектът използва следните API keys (вградени в кода):
-- OpenWeatherMap API Key: `06c5fcf1013fc1260a9a1213e2630e08`
-- Google Maps API Key: `AIzaSyCuBsAjhTKdEYkR7utgXJCRfq6dlzD-MRQ`
+Проектът използва API keys за OpenWeatherMap и Google Maps. 
+Ключовете са вградени в кода за улеснение на тестването (учебна цел).
 
 ## Тестови данни
 
