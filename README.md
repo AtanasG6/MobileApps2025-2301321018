@@ -118,7 +118,7 @@ Weather Travel Planner е Android приложение за планиране �
 
 Release APK файлът се намира в `/apk/app-release.apk`
 
-Размер: 6.12 MB
+Размер: 6.40 MB
 
 ## Тестване
 
