@@ -1,5 +1,7 @@
 # Weather Travel Planner
 
+<img src="screenshots/app_icon.png" width="120">
+
 **Факултетен номер:** 2301321018
 
 **Автор:** Атанас Гюлчев
