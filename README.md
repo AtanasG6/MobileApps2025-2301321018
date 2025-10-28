@@ -2,13 +2,12 @@
 
 <img src="screenshots/app_icon.png" width="120">
 
+**Автор:** Атанас Гюлчев  
 **Факултетен номер:** 2301321018
-
-**Автор:** Атанас Гюлчев
 
 ## Описание на идеята
 
-Weather Travel Planner е Android приложение за планиране на пътувания с интеграция на прогноза за времето. Приложението позволява на потребителите да създават, редактират и управляват планирани пътувания, като им предоставя актуална информация за времето в избраните дестинации и визуализация на картата.
+Weather Travel Planner е Android приложение за планиране на пътувания с интеграция на прогноза за времето. Приложението позволява на потребителите да създават, редактират и управляват планирани пътувания, като им предоставя актуална информация за времето в избраните дестинации, визуализация на картата и push notifications за напомняния.
 
 ## Как работи
 
@@ -18,12 +17,14 @@ Weather Travel Planner е Android приложение за планиране �
 - **CRUD операции:** Създаване, преглед, редакция и изтриване на пътувания
 - **Прогноза за времето:** Интеграция с OpenWeatherMap API за текуща прогноза
 - **Визуализация на карта:** Google Maps показва локацията на избрания град
+- **Push notifications:** Firebase Cloud Messaging за ежедневни напомняния
 - **Persistent storage:** Room база данни запазва данните след рестарт
 
 ### API Integration:
 - **OpenWeatherMap API:** За информация за времето (температура, влажност, условия)
 - **Geocoding API:** За получаване на координати на градове
 - **Google Maps SDK:** За визуализация на локации
+- **Firebase Cloud Messaging:** За push notifications
 
 ## Архитектура
 
@@ -42,6 +43,7 @@ Weather Travel Planner е Android приложение за планиране �
 │   ├── trips/            # Trip list & Add/Edit
 │   ├── details/          # Trip details with weather
 │   └── map/              # Google Maps view
+├── fcm/                  # Firebase Cloud Messaging
 ```
 
 ### Използвани технологии:
@@ -49,6 +51,7 @@ Weather Travel Planner е Android приложение за планиране �
 - **Room Database** - локална база данни
 - **Retrofit + Gson** - REST API комуникация
 - **Google Maps SDK** - карти
+- **Firebase Cloud Messaging** - push notifications
 - **Material Design 3** - UI компоненти
 - **Coroutines** - асинхронни операции
 - **LiveData & ViewModel** - lifecycle-aware компоненти
@@ -64,7 +67,8 @@ Weather Travel Planner е Android приложение за планиране �
    - Текуща прогноза за времето с иконка
    - Бутони за редакция, изтриване и карта
 6. При "View on Map" се показва локацията на Google Maps
-7. Промените се запазват persistent в базата данни
+7. Потребителят получава ежедневни push notifications с напомняния
+8. Промените се запазват persistent в базата данни
 
 ## Инсталация и стартиране
 
@@ -83,7 +87,7 @@ Weather Travel Planner е Android приложение за планиране �
 4. Стартирайте на емулатор или реално устройство
 
 ### API Keys:
-Проектът използва API keys за OpenWeatherMap и Google Maps. 
+Проектът използва API keys за OpenWeatherMap, Google Maps и Firebase. 
 Ключовете са вградени в кода за улеснение на тестването (учебна цел).
 
 ## Тестови данни
@@ -127,3 +131,7 @@ Release APK файлът се намира в `/apk/app-release.apk`
 ./gradlew test                    # Unit tests
 ./gradlew connectedAndroidTest    # UI tests
 ```
+
+## Firebase Cloud Messaging
+
+Приложението е интегрирано с Firebase Cloud Messaging за push notifications. Настроена е ежедневна кампания за напомняния към потребителите.
