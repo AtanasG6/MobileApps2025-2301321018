@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5359125083",
+    "project_id": "weathertravelplanner",
+    "storage_bucket": "weathertravelplanner.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5359125083:android:7546fcc0b783f3a0b4357e",
+        "android_client_info": {
+          "package_name": "com.example.weathertravelplanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVDbf9eRNyzW3MQkOUWolLypafG9exOZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
