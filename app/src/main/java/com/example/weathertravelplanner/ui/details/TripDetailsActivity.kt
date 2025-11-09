@@ -19,11 +19,12 @@ import com.example.weathertravelplanner.ui.trips.TripViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.weathertravelplanner.BuildConfig
 
 class TripDetailsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TripViewModel
-    private val apiKey = "06c5fcf1013fc1260a9a1213e2630e08"
+    private val apiKey = BuildConfig.OPENWEATHER_API_KEY
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var currentTripId: Long = 0
     private var currentCity: String = ""

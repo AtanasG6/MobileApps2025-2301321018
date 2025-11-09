@@ -13,12 +13,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.launch
+import com.example.weathertravelplanner.BuildConfig
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private var cityName: String = ""
-    private val apiKey = "06c5fcf1013fc1260a9a1213e2630e08"
+    private val apiKey = BuildConfig.OPENWEATHER_API_KEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchCityCoordinates() {
         lifecycleScope.launch {
             try {
-                val response = GeocodingRetrofitInstance.geocodingApi.getCoordinates(cityName, 1, apiKey)
+                val response =
+                    GeocodingRetrofitInstance.geocodingApi.getCoordinates(cityName, 1, apiKey)
 
                 if (response.isNotEmpty()) {
                     val location = response[0]
@@ -57,7 +59,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     Toast.makeText(this@MapActivity, "City not found", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@MapActivity, "Failed to load location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MapActivity, "Failed to load location", Toast.LENGTH_SHORT)
+                    .show()
                 e.printStackTrace()
             }
         }
