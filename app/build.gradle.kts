@@ -31,6 +31,8 @@ android {
             "OPENWEATHER_API_KEY",
             "\"${props.getProperty("OPENWEATHER_API_KEY") ?: ""}\""
         )
+        // Also add Maps key to manifest
+        manifestPlaceholders["MAPS_API_KEY"] = props.getProperty("GOOGLE_MAPS_API_KEY") ?: ""
     }
 
     buildTypes {
