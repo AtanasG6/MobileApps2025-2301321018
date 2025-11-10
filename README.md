@@ -114,6 +114,9 @@ Weather Travel Planner е Android приложение за планиране �
 ### Визуализация на карта
 <img src="screenshots/4_map.png" width="300">
 
+### Нотификация
+<img src="screenshots/5_notifictation.png" width="300">
+
 ## APK
 
 Release APK файлът се намира в `/apk/app-release.apk`
